@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+    />
+    <meta name="description" content="Use Viewer to start building new applications or easily embed Cesium into existing applications.">
+    <meta name="cesium-sandcastle-labels" content="Beginner, Showcases">
+    <title>Cesium Demo</title>
+    <script type="text/javascript" src="../Sandcastle-header.js"></script>
+    <script src="../CesiumUnminified/Cesium.js"></script>
+    <script>window.CESIUM_BASE_URL = "../CesiumUnminified/";</script>
+  </head>
+  <body
+    class="sandcastle-loading"
+    data-sandcastle-bucket="bucket-requirejs.html"
+  >
+<style>
+  @import url(../templates/bucket.css);
+</style>
+<div id="cesiumContainer" class="fullSize"></div>
+<div id="loadingOverlay">
+  <h1>Loading...</h1>
+</div>
+<div id="toolbar"></div>
+<script id="cesium_sandcastle_script">
+window.startup = async function (Cesium) {
+    'use strict';
+//Sandcastle_Begin
+// Grant CesiumJS access to your ion assets
+Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3MGJlYTRiZC1lOTY5LTQ4YWEtOWU2OC1mYmM5YzFhOTM5MmQiLCJpZCI6MjM4MTc4LCJpYXQiOjE3MjUwNjkyMjZ9.fcp5p9q6SrjyNWgNiYZBWORVRC26A_5YBEQvUCGMWSU";
+
+try {
+  const viewer = new Cesium.Viewer("cesiumContainer", {
+    terrainProvider:
+      await Cesium.CesiumTerrainProvider.fromIonAssetId(2718206),
+  });
+
+  viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees(-113.42, 39.2125, 4000),
+    orientation: {
+      heading: Cesium.Math.toRadians(30.0),
+      pitch: Cesium.Math.toRadians(-30.0),
+      roll: 0.0,
+    },
+  });
+  
+  const resource = await Cesium.IonResource.fromAssetId(2757154);
+  const dataSource = await Cesium.KmlDataSource.load(resource, {
+      clampToGround: true
+    });
+  await viewer.dataSources.add(dataSource);
+ 
+} catch (error) {
+  console.log(error);
+}
+//Sandcastle_End
+    Sandcastle.finishedLoading();
+};
+if (typeof Cesium !== 'undefined') {
+    window.startupCalled = true;
+    window.startup(Cesium).catch((error) => {
+      "use strict";
+      console.error(error);
+    });
+}
+</script>
+</body>
+</html>
